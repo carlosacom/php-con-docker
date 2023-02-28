@@ -1,0 +1,27 @@
+version: '3'
+services:
+  php:
+    image: php:8.0-fpm
+    volumes:
+      - ./src:/var/www/html
+    networks:
+      - my-net
+    depends_on:
+      - composer
+  nginx:
+    build: .
+    ports:
+      - "8080:80"
+    depends_on:
+      - php
+    networks:
+      - my-net
+  composer:
+    image: composer:latest
+    volumes:
+      - ./src:/app
+    command: install
+    networks:
+      - my-net
+networks:
+  my-net:
